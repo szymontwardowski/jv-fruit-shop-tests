@@ -1,6 +1,7 @@
 package core.basesyntax;
 
 import core.basesyntax.model.FruitTransaction;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
