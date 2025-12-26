@@ -28,11 +28,13 @@ public class BalanceOperationTest {
 
         String fruit = "apple";
         int amount = 100;
-        FruitTransaction transaction = new FruitTransaction(FruitTransaction.Operation.BALANCE, fruit, amount);
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.BALANCE, fruit, amount);
 
         operationHandler.apply(transaction);
 
         int actualAmount = Storage.getFruitStorage().get(fruit);
-        Assertions.assertEquals(amount, actualAmount, "Magazyn powinien zawierać 100 jabłek po operacji BALANCE");
+        Assertions.assertEquals(amount, actualAmount,
+                "Magazyn powinien zawierać 100 jabłek po operacji BALANCE");
     }
 }

@@ -23,13 +23,15 @@ public class SupplyOperationTest {
         Storage.getFruitStorage().put(fruit, 10);
 
         int supplyAmount = 20;
-        FruitTransaction transaction = new FruitTransaction(FruitTransaction.Operation.SUPPLY, fruit, supplyAmount);
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.SUPPLY, fruit, supplyAmount);
 
         operationHandler.apply(transaction);
         int expectedAmount = 30;
         int actualAmountInStorage = Storage.getFruitStorage().get(fruit);
 
-        Assertions.assertEquals(expectedAmount, actualAmountInStorage, "Magazyn powinien zawierać 30 jabłek");
+        Assertions.assertEquals(expectedAmount, actualAmountInStorage,
+                "Magazyn powinien zawierać 30 jabłek");
     }
 
     @AfterEach
