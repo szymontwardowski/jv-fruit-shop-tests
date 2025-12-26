@@ -3,6 +3,7 @@ package core.basesyntax;
 import core.basesyntax.service.FileReader;
 import core.basesyntax.service.io.FileReaderImpl;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -17,9 +18,14 @@ public class FileReaderTest {
 
     @Test
     void read_validFile_ok() throws IOException {
-        Path tempFile = tempDir.resolve("input.csv");
+        Path tempFile = tempDir.resolve("input.csv").toAbsolutePath();
         List<String> expected = List.of(
-                "type,fruit,quantity", "b,banana,20, p.apple,10");
+                "type,fruit,quantity",
+                "b,banana,20",
+                "p,apple,10"
+        );
+
+        Files.write(tempFile, expected);
 
         List<String> actual = fileReader.input(tempFile.toString());
 
