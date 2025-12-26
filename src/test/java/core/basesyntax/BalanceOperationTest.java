@@ -3,7 +3,6 @@ package core.basesyntax;
 import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.operation.BalanceOperation;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +20,6 @@ public class BalanceOperationTest {
     @AfterEach
     void teardown() {
 
-
         Storage.getFruitStorage().clear();
     }
 
@@ -31,7 +29,6 @@ public class BalanceOperationTest {
         String fruit = "apple";
         int amount = 100;
         FruitTransaction transaction = new FruitTransaction(FruitTransaction.Operation.BALANCE, fruit, amount);
-
 
         operationHandler.apply(transaction);
 

@@ -24,13 +24,15 @@ public class PurchaseOperationTest {
         Storage.getFruitStorage().put(fruit, 100);
         int purchaseAmount = 40;
 
-        FruitTransaction transaction = new FruitTransaction(FruitTransaction.Operation.PURCHASE, fruit, purchaseAmount);
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.PURCHASE, fruit, purchaseAmount);
         operationHandler.apply(transaction);
 
         int expectedAmount = 60;
         int actualAmountInStorage = Storage.getFruitStorage().get(fruit);
 
-        Assertions.assertEquals(expectedAmount, actualAmountInStorage, "Magazyn powinien zawierać sume 100 - 40 = 60");
+        Assertions.assertEquals(expectedAmount, actualAmountInStorage,
+                "Magazyn powinien zawierać sume 100 - 40 = 60");
     }
 
     @AfterEach

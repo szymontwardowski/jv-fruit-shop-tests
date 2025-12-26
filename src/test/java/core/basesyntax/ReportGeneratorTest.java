@@ -24,10 +24,12 @@ class ReportGeneratorTest {
 
         String actualReport = reportGenerator.getReport();
 
-
         String expectedHeader = "fruit,quantity";
-        Assertions.assertTrue(actualReport.contains(expectedHeader), "Raport powinien zawierać nagłówek");
-        Assertions.assertTrue(actualReport.contains("apple,20"), "Raport powinien zawierać dane o jabłkach");
-        Assertions.assertTrue(actualReport.contains("banana,10"), "Raport powinien zawierać dane o bananach");
+        Assertions.assertTrue(actualReport.contains(expectedHeader),
+                "Raport powinien zawierać nagłówek");
+        Assertions.assertTrue(actualReport.contains("apple,20"),
+                "Raport powinien zawierać dane o jabłkach");
+        Assertions.assertTrue(actualReport.contains("banana,10"),
+                "Raport powinien zawierać dane o bananach");
     }
 }
