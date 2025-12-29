@@ -1,11 +1,11 @@
 package core.basesyntax;
 
-import core.basesyntax.db.Storage;
-import core.basesyntax.service.ReportGenerator;
-import core.basesyntax.service.ReportGeneratorImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import core.basesyntax.db.Storage;
+import core.basesyntax.service.ReportGenerator;
+import core.basesyntax.service.ReportGeneratorImpl;
 
 class ReportGeneratorTest {
     private ReportGenerator reportGenerator;

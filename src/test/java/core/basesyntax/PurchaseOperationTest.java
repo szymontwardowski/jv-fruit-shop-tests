@@ -1,12 +1,12 @@
 package core.basesyntax;
 
-import core.basesyntax.db.Storage;
-import core.basesyntax.model.FruitTransaction;
-import core.basesyntax.service.operation.PurchaseOperation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import core.basesyntax.db.Storage;
+import core.basesyntax.model.FruitTransaction;
+import core.basesyntax.service.operation.PurchaseOperation;
 
 public class PurchaseOperationTest {
     private PurchaseOperation operationHandler;
