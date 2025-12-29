@@ -1,8 +1,8 @@
 package core.basesyntax;
 
-import java.util.List;
 import core.basesyntax.model.FruitTransaction;
 import core.basesyntax.service.CsvParser;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

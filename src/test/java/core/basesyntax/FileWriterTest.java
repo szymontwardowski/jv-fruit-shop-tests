@@ -1,5 +1,7 @@
 package core.basesyntax;
 
+import core.basesyntax.service.FileWriter;
+import core.basesyntax.service.io.FileWriterImpl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,8 +9,6 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import core.basesyntax.service.FileWriter;
-import core.basesyntax.service.io.FileWriterImpl;
 
 public class FileWriterTest {
     @TempDir
