@@ -10,6 +10,9 @@ public class CsvParser {
     private static final int QUANTITY_INDEX = 2;
 
     public List<FruitTransaction> parse(List<String> rawLines) {
+        if (rawLines == null) {
+            throw new RuntimeException("Input lines cannot be null");
+        }
         return rawLines.stream()
                 .skip(1)
                 .map(this::parseLine)
@@ -27,13 +30,20 @@ public class CsvParser {
             String fruit = parts[FRUIT_INDEX].trim();
             int quantity = Integer.parseInt(parts[QUANTITY_INDEX].trim());
 
+            if (quantity < 0) {
+                throw new RuntimeException("Quantity cannot be negative: " + line);
+            }
+
             FruitTransaction.Operation operation = FruitTransaction
                     .Operation.getByCode(operationCode);
 
             return new FruitTransaction(operation, fruit, quantity);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException(
                     "Error parsing line to FruitTransaction: " + line, e);
         }
     }
 }
+
