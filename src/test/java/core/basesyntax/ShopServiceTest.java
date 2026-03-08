@@ -14,6 +14,7 @@ import core.basesyntax.strategy.OperationStrategyImpl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,24 +32,56 @@ public class ShopServiceTest {
 
         OperationStrategy strategy = new OperationStrategyImpl(handlers);
         shopService = new ShopServiceImpl(strategy);
-        Storage.getFruitStorage().clear();
+        Storage.fruitStorage.clear();
+    }
+
+    @AfterEach
+    void tearDown() {
+        Storage.fruitStorage.clear();
     }
 
     @Test
-    void process_validTransactions_ok() {
+    void process_multipleTransactions_ok() {
         List<FruitTransaction> transactions = List.of(
                 new FruitTransaction(FruitTransaction.Operation.BALANCE, "apple", 100),
                 new FruitTransaction(FruitTransaction.Operation.SUPPLY, "apple", 50),
                 new FruitTransaction(FruitTransaction.Operation.PURCHASE, "apple", 30),
-                new FruitTransaction(FruitTransaction.Operation.RETURN, "apple", 10)
+                new FruitTransaction(FruitTransaction.Operation.RETURN, "apple", 10),
+                new FruitTransaction(FruitTransaction.Operation.BALANCE, "banana", 20),
+                new FruitTransaction(FruitTransaction.Operation.PURCHASE, "banana", 5)
         );
 
         shopService.process(transactions);
 
-        int expected = 130; // 100 + 50 - 30 + 10
-        int actual = Storage.getFruitStorage().get("apple");
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(130, Storage.fruitStorage.get("apple"),
+                "Final amount of apples should be 100 + 50 - 30 + 10 = 130");
+        Assertions.assertEquals(15, Storage.fruitStorage.get("banana"),
+                "Final amount of bananas should be 20 - 5 = 15");
+    }
+
+    @Test
+    void process_emptyList_ok() {
+        shopService.process(List.of());
+        Assertions.assertTrue(Storage.fruitStorage.isEmpty(),
+                "Storage should remain empty after processing an empty list of transactions");
+    }
+
+    @Test
+    void process_invalidTransaction_notOk() {
+        List<FruitTransaction> transactions = List.of(
+                new FruitTransaction(FruitTransaction.Operation.BALANCE, "apple", 10),
+                new FruitTransaction(FruitTransaction.Operation.PURCHASE, "apple", 50) // More than available
+        );
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            shopService.process(transactions);
+        }, "Should throw exception when any transaction in the list is invalid");
+    }
+
+    @Test
+    void process_nullInput_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            shopService.process(null);
+        }, "Should throw exception when transaction list is null");
     }
 }
-
-

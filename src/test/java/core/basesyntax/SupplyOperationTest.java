@@ -14,28 +14,61 @@ public class SupplyOperationTest {
     @BeforeEach
     void setUp() {
         operationHandler = new SupplyOperation();
-        Storage.getFruitStorage().clear();
+        Storage.fruitStorage.clear();
+    }
+
+    @AfterEach
+    void tearDown() {
+        Storage.fruitStorage.clear();
     }
 
     @Test
     void apply_validOperation_ok() {
         String fruit = "apple";
-        Storage.getFruitStorage().put(fruit, 10);
-
+        Storage.fruitStorage.put(fruit, 10);
         int supplyAmount = 20;
         FruitTransaction transaction = new FruitTransaction(
                 FruitTransaction.Operation.SUPPLY, fruit, supplyAmount);
 
         operationHandler.apply(transaction);
-        int expectedAmount = 30;
-        int actualAmountInStorage = Storage.getFruitStorage().get(fruit);
 
+        int expectedAmount = 30;
+        int actualAmountInStorage = Storage.fruitStorage.get(fruit);
         Assertions.assertEquals(expectedAmount, actualAmountInStorage,
-                "Magazyn powinien zawierać 30 jabłek");
+                "Storage should contain 30 apples after supply of 20 to existing 10");
     }
 
-    @AfterEach
-    void tearDown() {
-        Storage.getFruitStorage().clear();
+    @Test
+    void apply_fruitDoesNotExist_ok() {
+        String fruit = "orange";
+        int supplyAmount = 50;
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.SUPPLY, fruit, supplyAmount);
+
+        operationHandler.apply(transaction);
+
+        int actualAmountInStorage = Storage.fruitStorage.get(fruit);
+        Assertions.assertEquals(supplyAmount, actualAmountInStorage,
+                "Supply should create a new entry if the fruit does not exist in storage");
+    }
+
+    @Test
+    void apply_negativeQuantity_notOk() {
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.SUPPLY, "apple", -10);
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            operationHandler.apply(transaction);
+        }, "Should throw exception for negative supply quantity");
+    }
+
+    @Test
+    void apply_nullFruit_notOk() {
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.SUPPLY, null, 10);
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            operationHandler.apply(transaction);
+        }, "Should throw exception when fruit name is null");
     }
 }

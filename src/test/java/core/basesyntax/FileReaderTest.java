@@ -12,25 +12,34 @@ import org.junit.jupiter.api.io.TempDir;
 
 public class FileReaderTest {
     @TempDir
-    private Path tempDir;
+    public Path tempDir;
 
     private final FileReader fileReader = new FileReaderImpl();
 
     @Test
     void read_validFile_ok() throws IOException {
-        Path tempFile = tempDir.resolve("input.csv").toAbsolutePath();
+        Path tempFile = tempDir.resolve("input.csv");
         List<String> expected = List.of(
                 "type,fruit,quantity",
                 "b,banana,20",
                 "p,apple,10"
         );
-
         Files.write(tempFile, expected);
 
         List<String> actual = fileReader.input(tempFile.toString());
 
         Assertions.assertEquals(expected, actual,
-                "FileReader powinien zwrócić wszystkie linie z pliku");
+                "FileReader should return all lines from the file");
+    }
+
+    @Test
+    void read_emptyFile_ok() throws IOException {
+        Path emptyFile = tempDir.resolve("empty.csv");
+        Files.createFile(emptyFile);
+
+        List<String> actual = fileReader.input(emptyFile.toString());
+
+        Assertions.assertTrue(actual.isEmpty(), "Result should be empty for an empty file");
     }
 
     @Test
@@ -38,7 +47,13 @@ public class FileReaderTest {
         String wrongPath = "non_existent_file.csv";
         Assertions.assertThrows(RuntimeException.class, () -> {
             fileReader.input(wrongPath);
-        }, "Powinien zostać rzucony RuntimeException, gdy plik nie istnieje");
+        }, "Should throw RuntimeException when file does not exist");
+    }
+
+    @Test
+    void read_nullPath_notOk() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            fileReader.input(null);
+        }, "Should throw RuntimeException for null path");
     }
 }
-

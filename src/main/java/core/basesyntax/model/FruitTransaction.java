@@ -1,6 +1,16 @@
 package core.basesyntax.model;
 
 public class FruitTransaction {
+    private final Operation operation;
+    private final String fruit;
+    private final int quantity;
+
+    public FruitTransaction(Operation operation, String fruit, int quantity) {
+        this.operation = operation;
+        this.fruit = fruit;
+        this.quantity = quantity;
+    }
+
     public enum Operation {
         BALANCE('b'), SUPPLY('s'), RETURN('r'), PURCHASE('p');
 
@@ -22,16 +32,6 @@ public class FruitTransaction {
             }
             throw new RuntimeException("Unknown operation code: " + code);
         }
-    }
-
-    private final Operation operation;
-    private final String fruit;
-    private final int quantity;
-
-    public FruitTransaction(Operation operation, String fruit, int quantity) {
-        this.operation = operation;
-        this.fruit = fruit;
-        this.quantity = quantity;
     }
 
     public Operation getOperation() {

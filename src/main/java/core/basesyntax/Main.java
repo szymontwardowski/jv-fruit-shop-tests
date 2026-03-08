@@ -17,21 +17,20 @@ import core.basesyntax.service.operation.ReturnOperation;
 import core.basesyntax.service.operation.SupplyOperation;
 import core.basesyntax.strategy.OperationStrategy;
 import core.basesyntax.strategy.OperationStrategyImpl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Main {
-
     private static final String INPUT_FILE_PATH = "src/main/resources/input.csv";
     private static final String OUTPUT_FILE_PATH = "src/main/resources/result.csv";
 
     public static void main(String[] args) {
-        Map<FruitTransaction.Operation, OperationHandler> operationHandlers = Map.of(
-                FruitTransaction.Operation.BALANCE, new BalanceOperation(),
-                FruitTransaction.Operation.SUPPLY, new SupplyOperation(),
-                FruitTransaction.Operation.PURCHASE, new PurchaseOperation(),
-                FruitTransaction.Operation.RETURN, new ReturnOperation()
-        );
+        Map<FruitTransaction.Operation, OperationHandler> operationHandlers = new HashMap<>();
+        operationHandlers.put(FruitTransaction.Operation.BALANCE, new BalanceOperation());
+        operationHandlers.put(FruitTransaction.Operation.SUPPLY, new SupplyOperation());
+        operationHandlers.put(FruitTransaction.Operation.PURCHASE, new PurchaseOperation());
+        operationHandlers.put(FruitTransaction.Operation.RETURN, new ReturnOperation());
 
         OperationStrategy operationStrategy = new OperationStrategyImpl(operationHandlers);
         ShopService shopService = new ShopServiceImpl(operationStrategy);
@@ -39,11 +38,11 @@ public class Main {
         FileWriter fileWriter = new FileWriterImpl();
         CsvParser parser = new CsvParser();
         FileReader fileReader = new FileReaderImpl();
+
         List<String> rawTransactions = fileReader.input(INPUT_FILE_PATH);
         List<FruitTransaction> transactions = parser.parse(rawTransactions);
         shopService.process(transactions);
         String report = reportGenerator.getReport();
         fileWriter.output(report, OUTPUT_FILE_PATH);
-        System.out.println("Processing finished. Report written to: " + OUTPUT_FILE_PATH);
     }
 }

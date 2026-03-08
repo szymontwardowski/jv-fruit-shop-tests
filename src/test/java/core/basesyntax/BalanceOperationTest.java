@@ -13,19 +13,16 @@ public class BalanceOperationTest {
 
     @BeforeEach
     void setUp() {
-
         operationHandler = new BalanceOperation();
     }
 
     @AfterEach
     void teardown() {
-
-        Storage.getFruitStorage().clear();
+        Storage.fruitStorage.clear();
     }
 
     @Test
-    void handle_validTransaction_ok() {
-
+    void apply_validTransaction_ok() {
         String fruit = "apple";
         int amount = 100;
         FruitTransaction transaction = new FruitTransaction(
@@ -33,8 +30,41 @@ public class BalanceOperationTest {
 
         operationHandler.apply(transaction);
 
-        int actualAmount = Storage.getFruitStorage().get(fruit);
+        int actualAmount = Storage.fruitStorage.get(fruit);
         Assertions.assertEquals(amount, actualAmount,
-                "Magazyn powinien zawierać 100 jabłek po operacji BALANCE");
+                "Storage should contain 100 apples after BALANCE operation");
+    }
+
+    @Test
+    void apply_existingFruitOverride_ok() {
+        Storage.fruitStorage.put("apple", 50);
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.BALANCE, "apple", 150);
+
+        operationHandler.apply(transaction);
+
+        int actualAmount = Storage.fruitStorage.get("apple");
+        Assertions.assertEquals(150, actualAmount,
+                "BALANCE should override existing value in storage");
+    }
+
+    @Test
+    void apply_negativeQuantity_notOk() {
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.BALANCE, "banana", -10);
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            operationHandler.apply(transaction);
+        }, "Should throw exception for negative quantity in BALANCE");
+    }
+
+    @Test
+    void apply_nullFruit_notOk() {
+        FruitTransaction transaction = new FruitTransaction(
+                FruitTransaction.Operation.BALANCE, null, 10);
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            operationHandler.apply(transaction);
+        }, "Should throw exception when fruit name is null");
     }
 }
