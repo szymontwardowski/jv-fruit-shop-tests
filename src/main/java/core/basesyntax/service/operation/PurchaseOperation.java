@@ -2,40 +2,18 @@ package core.basesyntax.service.operation;
 
 import core.basesyntax.db.Storage;
 import core.basesyntax.model.FruitTransaction;
-import java.util.Map;
 
 public class PurchaseOperation implements OperationHandler {
-
     @Override
     public void apply(FruitTransaction transaction) {
-        if (transaction == null) {
-            throw new RuntimeException("Transaction cannot be null.");
-        }
-
         String fruit = transaction.getFruit();
-        int quantity = transaction.getQuantity();
-
-        if (fruit == null || fruit.isEmpty()) {
-            throw new RuntimeException("Fruit name cannot be null or empty in transaction: "
-                    + transaction);
+        Integer currentQuantity = Storage.fruitStorage.get(fruit);
+        if (currentQuantity == null || currentQuantity < transaction.getQuantity()) {
+            throw new RuntimeException("Not enough fruits in storage or fruit does not exist");
         }
-
-        if (quantity < 0) {
-            throw new RuntimeException("Quantity for PURCHASE cannot be negative: "
-                    + quantity);
+        if (transaction.getQuantity() < 0) {
+            throw new RuntimeException("Quantity cannot be negative");
         }
-
-        Map<String, Integer> inventory = Storage.getFruitStorage();
-
-        int currentQuantity = inventory.getOrDefault(fruit, 0);
-
-        if (quantity > currentQuantity) {
-            throw new RuntimeException("Insufficient stock to purchase " + quantity
-                    + " of " + fruit + ". Current stock: " + currentQuantity);
-        }
-
-        int newQuantity = currentQuantity - quantity;
-
-        inventory.put(fruit, newQuantity);
+        Storage.fruitStorage.put(fruit, currentQuantity - transaction.getQuantity());
     }
 }
