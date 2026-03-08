@@ -37,7 +37,7 @@ class CsvParserTest {
     void parse_onlyHeader_ok() {
         List<String> input = List.of("type,fruit,quantity");
         List<FruitTransaction> result = csvParser.parse(input);
-        Assertions.assertTrue(result.isEmpty(), "Result should be empty when only header is present");
+        Assertions.assertTrue(result.isEmpty(), "Result should be empty for only header");
     }
 
     @Test
@@ -50,20 +50,20 @@ class CsvParserTest {
     @Test
     void parse_malformedLine_notOk() {
         List<String> input = List.of("type,fruit,quantity", "b,banana");
-        Assertions.assertThrows(RuntimeException.class, () -> csvParser.parse(input),
-                "Should throw exception for line with missing quantity");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                csvParser.parse(input), "Should throw exception for missing quantity");
     }
 
     @Test
     void parse_nullInput_notOk() {
-        Assertions.assertThrows(RuntimeException.class, () -> csvParser.parse(null),
-                "Should throw exception when input list is null");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                csvParser.parse(null), "Should throw exception for null input");
     }
 
     @Test
     void parse_negativeQuantityInLine_notOk() {
         List<String> input = List.of("type,fruit,quantity", "b,banana,-5");
-        Assertions.assertThrows(RuntimeException.class, () -> csvParser.parse(input),
-                "Should throw exception for negative quantity in CSV line");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                csvParser.parse(input), "Should throw exception for negative quantity");
     }
 }

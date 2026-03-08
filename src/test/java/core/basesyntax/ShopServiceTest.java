@@ -53,35 +53,31 @@ public class ShopServiceTest {
 
         shopService.process(transactions);
 
-        Assertions.assertEquals(130, Storage.fruitStorage.get("apple"),
-                "Final amount of apples should be 100 + 50 - 30 + 10 = 130");
-        Assertions.assertEquals(15, Storage.fruitStorage.get("banana"),
-                "Final amount of bananas should be 20 - 5 = 15");
+        Assertions.assertEquals(130, Storage.fruitStorage.get("apple"), "Apple count 130");
+        Assertions.assertEquals(15, Storage.fruitStorage.get("banana"), "Banana count 15");
     }
 
     @Test
     void process_emptyList_ok() {
         shopService.process(List.of());
         Assertions.assertTrue(Storage.fruitStorage.isEmpty(),
-                "Storage should be empty after processing empty list");
+                "Storage should be empty for empty transactions");
     }
 
     @Test
     void process_invalidTransaction_notOk() {
         List<FruitTransaction> transactions = List.of(
                 new FruitTransaction(FruitTransaction.Operation.BALANCE, "apple", 10),
-                new FruitTransaction(FruitTransaction.Operation.PURCHASE, "apple", 50) // More than available
+                new FruitTransaction(FruitTransaction.Operation.PURCHASE, "apple", 50)
         );
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            shopService.process(transactions);
-        }, "Should throw exception when any transaction in the list is invalid");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                shopService.process(transactions), "Should throw for invalid quantity");
     }
 
     @Test
     void process_nullInput_notOk() {
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            shopService.process(null);
-        }, "Should throw exception when transaction list is null");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                shopService.process(null), "Should throw for null input");
     }
 }

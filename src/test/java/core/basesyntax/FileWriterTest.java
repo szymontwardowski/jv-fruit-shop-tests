@@ -30,9 +30,9 @@ public class FileWriterTest {
 
         fileWriter.output(content, path);
 
-        Assertions.assertTrue(tempFile.exists(), "File should be created at specified path");
+        Assertions.assertTrue(tempFile.exists(), "File should be created");
         String actualContent = Files.readString(tempFile.toPath());
-        Assertions.assertEquals(content, actualContent, "File content should match the input string");
+        Assertions.assertEquals(content, actualContent, "Content should match");
     }
 
     @Test
@@ -40,17 +40,15 @@ public class FileWriterTest {
         String invalidPath = "invalid/path/to/file.csv";
         String content = "some content";
         Assertions.assertThrows(RuntimeException.class, () ->
-                fileWriter.output(content, invalidPath), "Should throw exception");
+                fileWriter.output(content, invalidPath), "Should throw for invalid path");
     }
 
     @Test
     void output_nullPathOrContent_notOk() {
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            fileWriter.output(null, "some/path.csv");
-        }, "Should throw RuntimeException when content is null");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                fileWriter.output(null, "some/path.csv"), "Should throw for null content");
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            fileWriter.output("some content", null);
-        }, "Should throw RuntimeException when path is null");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                fileWriter.output("some content", null), "Should throw for null path");
     }
 }
