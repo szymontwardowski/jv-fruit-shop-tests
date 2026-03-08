@@ -12,7 +12,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 public class FileReaderTest {
     @TempDir
-    public Path tempDir;
+    private Path tempDir;
 
     private final FileReader fileReader = new FileReaderImpl();
 

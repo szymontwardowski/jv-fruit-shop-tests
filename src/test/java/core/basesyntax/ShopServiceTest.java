@@ -63,7 +63,7 @@ public class ShopServiceTest {
     void process_emptyList_ok() {
         shopService.process(List.of());
         Assertions.assertTrue(Storage.fruitStorage.isEmpty(),
-                "Storage should remain empty after processing an empty list of transactions");
+                "Storage should be empty after processing empty list");
     }
 
     @Test

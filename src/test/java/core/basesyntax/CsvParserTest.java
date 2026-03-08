@@ -43,8 +43,8 @@ class CsvParserTest {
     @Test
     void parse_invalidOperationSymbol_notOk() {
         List<String> input = List.of("type,fruit,quantity", "x,banana,10");
-        Assertions.assertThrows(RuntimeException.class, () -> csvParser.parse(input),
-                "Should throw exception for unknown operation symbol 'x'");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                csvParser.parse(input), "Should throw exception for unknown symbol");
     }
 
     @Test

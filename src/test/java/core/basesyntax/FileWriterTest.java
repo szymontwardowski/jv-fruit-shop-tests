@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 public class FileWriterTest {
     @TempDir
-    public Path tempDir;
+    private Path tempDir;
 
     private FileWriter fileWriter;
 
@@ -39,10 +39,8 @@ public class FileWriterTest {
     void output_invalidPath_notOk() {
         String invalidPath = "invalid/path/to/file.csv";
         String content = "some content";
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            fileWriter.output(content, invalidPath);
-        }, "Should throw RuntimeException when path is invalid or inaccessible");
+        Assertions.assertThrows(RuntimeException.class, () ->
+                fileWriter.output(content, invalidPath), "Should throw exception");
     }
 
     @Test

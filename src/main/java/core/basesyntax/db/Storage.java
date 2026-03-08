@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Storage {
-    public static final Map<String, Integer> fruitStorage = new HashMap<>(); // Brak pustej linii wyżej
+    public static final Map<String, Integer> fruitStorage = new HashMap<>();
 
     public static void clear() {
         fruitStorage.clear();
